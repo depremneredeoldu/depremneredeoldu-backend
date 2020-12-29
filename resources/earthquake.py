@@ -1,4 +1,5 @@
 from flask_restful import Resource, reqparse
+from flask_cors import CORS, cross_origin
 
 # intern package
 from models.earthquake import EarthquakeModel
@@ -36,6 +37,7 @@ class Earthquake(Resource):
 
 
 class EarthquakesList(Resource):
+    @cross_origin(origin='*',headers=['Content-Type','Authorization'])
     def get(self):
         return {"earthquakes": [earthquake.json() for earthquake in EarthquakeModel.query.all()]}
 
