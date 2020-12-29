@@ -15,6 +15,7 @@ class Earthquake(Resource):
     parser.add_argument("magnitude", required=True, help="This field cannot be left blank!")
     parser.add_argument("location", required=True, help="This field cannot be left blank!")
 
+    @cross_origin(origin='*',headers=['Content-Type','Authorization'])
     def get(self, id_):
         earthquake = EarthquakeModel.find_by_id(id_)
         if earthquake:
