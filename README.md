@@ -11,19 +11,17 @@ For this project, I used **Python** on the backend (**Flask RESTful API**). The 
 
     pip install -r requirements.txt
 
-# To run
-
-##### Initialize the database before to run.
+# Initialize the database
 
     python initialize_db.py
 
-##### And then,
+# To run
 
     python app.py
 
 # Automate your data extraction
 
-If you want to update earthquake data automatically, you can use **CRON** to automate this processus by executing **initialize_db.py**
+If you want to update earthquake data automatically, you can configure a **Cron Job** to automate this processus by executing **initialize_db.py** script every minute.
 
 
 ## Data
@@ -33,4 +31,4 @@ The data comes from **Kandilli Observatory and Earthquake Research Institute** a
 
 ## Contact
 
-    Alican Yüksel - alicanyuksel@outlookcom
+    Alican Yüksel - alicanyuksel@outlook.com
