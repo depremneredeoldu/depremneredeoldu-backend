@@ -21,7 +21,7 @@ For this project, I used **Python** on the backend (**Flask RESTful API**). The 
 
 # Automate your data extraction
 
-If you want to update earthquake data automatically, you can configure a **Cron Job** to automate this processus by executing **initialize_db.py** script every minute.
+If you want to update the earthquake data automatically, you can configure a **Cron Job** to automate this processus by executing **initialize_db.py** script every minute.
 
 
 ## Data
