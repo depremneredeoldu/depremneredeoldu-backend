@@ -1,6 +1,6 @@
 # DepremNeredeOldu: The earthquakes visualization
 
-For this project, I used **Python** on the backend (**Flask RESTful API**). The goal is to visualize the earthquakes in Turkey on map with [MapBox](https://www.mapbox.com). The project is deployed on [depremneredeoldu.com](https://depremneredeoldu.com)
+For this project, I used **Python** on the backend (**Flask RESTful API**). The goal is to visualize the earthquakes in Turkey on map with [MapBox](https://www.mapbox.com). The project is deployed on [depremneredeoldu.com](https://depremneredeoldu.com) with Nginx on Ubuntu server.
 
 # Requirements
 
