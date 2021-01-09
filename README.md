@@ -4,11 +4,6 @@ For this project, I used **Python** on the backend (**Flask RESTful API**). The 
 
 The project is deployed on [depremneredeoldu.com](https://depremneredeoldu.com) with Nginx on Ubuntu server. The backend URL is [api.depremneredeoldu.com](https://api.depremneredeoldu.com)
 
-## To get the earthquakes information
-
-You just need to send a **GET** request to :
-
-    api.depremneredeoldu.com/earthquakes
 
 ## Requirements
 
