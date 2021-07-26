@@ -23,7 +23,6 @@ class EarthquakeModel(db.Model):
             magnitude,
             location
     ):
-        self.earthquake_id = f"{self.date}-{self.time}-{self.magnitude}"
         self.date = date
         self.time = time
         self.latitude = latitude
@@ -34,7 +33,7 @@ class EarthquakeModel(db.Model):
 
     def json(self):
         return {
-            "earthquake_id": self.earthquake_id,
+            "earthquake_id": f"{self.date}-{self.time}-{self.magnitude}"
             "date": self.date,
             "time": self.time,
             "latitude": self.latitude,
