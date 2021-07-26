@@ -15,7 +15,6 @@ class EarthquakeModel(db.Model):
 
     def __init__(
             self,
-            earthquake_id,
             date,
             time,
             latitude,
