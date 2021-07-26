@@ -33,7 +33,7 @@ class EarthquakeModel(db.Model):
 
     def json(self):
         return {
-            "earthquake_id": f"{self.date}-{self.time}-{self.magnitude}"
+            "earthquake_id": f"{self.date}-{self.time}-{self.magnitude}",
             "date": self.date,
             "time": self.time,
             "latitude": self.latitude,
