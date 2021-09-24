@@ -15,7 +15,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 api = Api(app)
 
-api.add_resource(Earthquake, "/earthquake/<int:id_>", endpoint="earthquake")
+api.add_resource(Earthquake, "/earthquake/<string:id_>", endpoint="earthquake")
 api.add_resource(Earthquake, "/earthquake", endpoint="earthquake_post")
 api.add_resource(EarthquakesList, "/earthquakes", endpoint="earthquakes")
 
