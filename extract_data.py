@@ -55,7 +55,7 @@ def create_dict(file_name: str):
         earthquake_id = re.sub('\D','', f"{date}-{time}-{magnitude}")
 
         data = {
-            "earthquake_id": earthquake_id,
+            "earthquake_id": int(earthquake_id),
             "date": date,
             "time": time,
             "latitude": latitude,
