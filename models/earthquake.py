@@ -5,7 +5,7 @@ class EarthquakeModel(db.Model):
     __tablename__ = "earthquakes"
 
     id = db.Column(db.Integer, primary_key=True)
-    earthquake_id = db.Column(db.String(80), nullable=False, unique=True)
+    earthquake_id = db.Column(db.Integer, nullable=False, unique=True)
     date = db.Column(db.String(80), nullable=False)
     time = db.Column(db.String(80), nullable=False)
     latitude = db.Column(db.String(80), nullable=False)
