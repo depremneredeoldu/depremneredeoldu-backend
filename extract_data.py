@@ -3,7 +3,7 @@ import requests
 import re
 
 
-def extract_from_web(file_name):
+def extract_from_web(file_name: str):
     # specify url
     url = 'http://www.koeri.boun.edu.tr/scripts/lst0.asp'
 
@@ -21,7 +21,7 @@ def extract_from_web(file_name):
     data_txt.write(all_text.text)
 
 
-def clean_data_extracted(file_name):
+def clean_data_extracted(file_name: str):
     with open(file_name, "r+", encoding="utf-8") as fl:
         all_text = fl.read()
 
@@ -39,7 +39,7 @@ def clean_data_extracted(file_name):
         fl.truncate()
 
 
-def create_dict(file_name):
+def create_dict(file_name: str):
     all_data = list()
     for line in open(file_name, "r", encoding="utf-8"):
         split_data = line.split()
@@ -52,8 +52,10 @@ def create_dict(file_name):
         depth = split_data[4]
         magnitude = split_data[6]
         location = split_data[8]
+        earthquake_id = re.sub('\D','', f"{date}-{time}-{magnitude}")
 
         data = {
+            "earthquake_id": earthquake_id,
             "date": date,
             "time": time,
             "latitude": latitude,
@@ -65,5 +67,6 @@ def create_dict(file_name):
 
         all_data.append(data)
 
-    return all_data
+    # reverse for sorting the date
+    return all_data[::-1]
 
