@@ -1,0 +1,19 @@
+name: DepremNeredeOldu Pipeline
+on:
+  push:
+    branches: [master]
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: ssh connection
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DEPREM_PROD_HOSTNAME }}
+          username: ${{ secrets.DEPREM_PROD_USERNAME }}
+          key: ${{ secrets.DEPREM_PROD_SSH }}
+          port: 22
+          script: |
+            echo 'hello world' >> hello.txt
