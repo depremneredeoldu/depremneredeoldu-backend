@@ -10,7 +10,6 @@ jobs:
     steps:
       - name: ssh connection
         uses: appleboy/ssh-action@master
-        env:
         with:
           host: ${{ secrets.DEPREM_PROD_HOSTNAME }}
           username: ${{ secrets.DEPREM_PROD_USERNAME }}
