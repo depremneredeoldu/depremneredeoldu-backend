@@ -3,12 +3,6 @@ on:
   push:
     branches: [master]
 
-env:
-  REPOSITORY_NAME: ${{ github.repository }}
-  HOSTNAME: ${{ secrets.DEPREM_PROD_HOSTNAME }}
-  USERNAME: ${{ secrets.DEPREM_PROD_USERNAME }}
-  SSH_KEY: ${{ secrets.DEPREM_PROD_SSH }}
-
 jobs:
   deploy:
     name: Deploy
@@ -16,8 +10,13 @@ jobs:
     steps:
       - name: ssh connection
         uses: appleboy/ssh-action@master
+        env:
+          REPOSITORY_NAME: ${{ github.repository }}
+          HOSTNAME: ${{ secrets.DEPREM_PROD_HOSTNAME }}
+          USERNAME: ${{ secrets.DEPREM_PROD_USERNAME }}
+          SSH_KEY: ${{ secrets.DEPREM_PROD_SSH }}
         with:
-          envs: REPOSITORY_NAME,HOSTNAME,USERNAME, SSH_KEY
+          envs: REPOSITORY_NAME,HOSTNAME,USERNAME,SSH_KEY
           host: $HOSTNAME
           username: $USERNAME
           key: $SSH_KEY
