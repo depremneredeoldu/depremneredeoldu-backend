@@ -19,7 +19,7 @@ jobs:
           key: ${{ secrets.DEPREM_PROD_SSH }}
           port: 22
           script: |
-            echo $REPOSITORY_NAME
+            echo ${{ github.event.repository.name }}
             if [ -d "$REPOSITORY_NAME" ]; then
               cd $REPOSITORY_NAME
               git checkout master
