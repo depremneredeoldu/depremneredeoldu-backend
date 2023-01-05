@@ -12,14 +12,11 @@ jobs:
         uses: appleboy/ssh-action@master
         env:
           REPOSITORY_NAME: ${{ github.repository }}
-          HOSTNAME: ${{ secrets.DEPREM_PROD_HOSTNAME }}
-          USERNAME: ${{ secrets.DEPREM_PROD_USERNAME }}
-          SSH_KEY: ${{ secrets.DEPREM_PROD_SSH }}
         with:
-          envs: REPOSITORY_NAME,HOSTNAME,USERNAME,SSH_KEY
-          host: $HOSTNAME
-          username: $USERNAME
-          key: $SSH_KEY
+          envs: REPOSITORY_NAME
+          host: ${{ secrets.DEPREM_PROD_HOSTNAME }}
+          username: ${{ secrets.DEPREM_PROD_USERNAME }}
+          key: ${{ secrets.DEPREM_PROD_SSH }}
           port: 22
           script: |
             if [ -d "$REPOSITORY_NAME" ]; then
