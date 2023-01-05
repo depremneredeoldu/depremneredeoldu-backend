@@ -11,19 +11,16 @@ jobs:
       - name: ssh connection
         uses: appleboy/ssh-action@master
         env:
-          REPOSITORY_NAME: ${{ github.repository }}
         with:
-          envs: REPOSITORY_NAME
           host: ${{ secrets.DEPREM_PROD_HOSTNAME }}
           username: ${{ secrets.DEPREM_PROD_USERNAME }}
           key: ${{ secrets.DEPREM_PROD_SSH }}
           port: 22
           script: |
-            echo ${{ github.event.repository.name }}
-            if [ -d "$REPOSITORY_NAME" ]; then
-              cd $REPOSITORY_NAME
+            if [ -d "${{ github.event.repository.name }}" ]; then
+              cd ${{ github.event.repository.name }}
               git checkout master
               git pull
             else
-              git clone git@github.com:$REPOSITORY_NAME.git
+              git clone git@github.com:${{ github.repository }}.git
             fi
