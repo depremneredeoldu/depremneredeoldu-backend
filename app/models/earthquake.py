@@ -3,7 +3,7 @@ from sqlalchemy.types import Date
 from app.core.database import Base
 
 
-class EarthquakeModel(Base):
+class Earthquake(Base):
     __tablename__ = "earthquakes"
 
     id = Column(Integer, primary_key=True)
