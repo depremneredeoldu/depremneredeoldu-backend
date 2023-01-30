@@ -1,5 +1,5 @@
-IMAGE_TAG_NAME=depremneredeoldu-backend-img
-CONTAINER_NAME=depremneredeoldu-backend
+IMAGE_TAG_NAME=depremneredeoldu-api-img
+CONTAINER_NAME=depremneredeoldu-api
 
 build:
 	docker build -t ${IMAGE_TAG_NAME} .
