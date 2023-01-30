@@ -6,4 +6,4 @@ build:
 
 deploy:
 	docker rm -f ${CONTAINER_NAME} || true
-	docker run --name ${CONTAINER_NAME} -d ${IMAGE_TAG_NAME}
+	docker run --name ${CONTAINER_NAME} -d ${IMAGE_TAG_NAME} --network swarm
