@@ -10,5 +10,5 @@ deploy:
 	docker rm -f ${CONTAINER_NAME} || true
 	docker run --name ${CONTAINER_NAME} -v ${DEV_DB_DIR}:/app/db --network ${NETWORK_NAME} -d ${IMAGE_TAG_NAME}
 
-reload-nginx:
+nginx-reload:
 	docker exec nginx nginx -s reload
