@@ -1,25 +1,20 @@
-# DepremNeredeOldu: Backend
+# DepremNeredeOldu: Backend [![DepremNeredeOldu Pipeline](https://github.com/depremneredeoldu/depremneredeoldu-backend/actions/workflows/pipeline.yaml/badge.svg)](https://github.com/depremneredeoldu/depremneredeoldu-backend/actions/workflows/pipeline.yaml)
 
-For this project, I used **Python** on the backend (**Flask RESTful API**). The goal is to build the Earthquake API which gives you the earthquakes informations in Turkey. To do that, we get the data unstructured with web scraping and structure them into json structure and write them on the database.
+For this project, I used **Python** on the backend (**FastAPI**). The goal is to build the Earthquake API which gives you the earthquakes informations in Turkey. To do that, we get the data unstructured with web scraping and structure them into json structure and write them on the database.
 
-The project is deployed on [depremneredeoldu.com](https://depremneredeoldu.com) with Nginx on Ubuntu server. The backend URL is [api.depremneredeoldu.com](https://api.depremneredeoldu.com)
-
+The project is deployed on [depremneredeoldu.com](https://depremneredeoldu.com). The API URL is [api.depremneredeoldu.com](https://api.depremneredeoldu.com)
 
 ## Requirements
 
     pip install -r requirements.txt
 
-## Initialize the database
+## Build docker image
 
-    python initialize_db.py
+    make build
 
 ## To run
 
-    python app.py
-
-## Automate your data extraction
-
-If you want to update the earthquake data automatically, you can configure a **Cron Job** to automate this processus by executing **initialize_db.py** script every minute.
+    make deploy
 
 ## Data
 
