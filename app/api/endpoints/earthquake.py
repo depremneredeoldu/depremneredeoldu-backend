@@ -5,6 +5,8 @@ from sqlalchemy.orm import Session
 from app.core.database import SessionLocal
 from app.core.database import Base, engine
 from app.crud import earthquake as earthquake_crud
+from fastapi import Security
+from app.core.security import check_api_key_post_endpoints
 
 Base.metadata.create_all(bind=engine)
 router = APIRouter()
@@ -27,7 +29,9 @@ async def get_all_earthquakes(db: Session = Depends(get_db)):
 
 @router.post("/earthquake")
 async def create_earthquake(
-    earthquake: EarthquakeModel, db: Session = Depends(get_db)
+    earthquake: EarthquakeModel,
+    db: Session = Depends(get_db),
+    api_key: str = Security(check_api_key_post_endpoints),
 ) -> JSONResponse:
     earthquake_obj = earthquake_crud.get_earthquake(db=db, earthquake_id=earthquake.earthquake_id)
     if earthquake_obj:
