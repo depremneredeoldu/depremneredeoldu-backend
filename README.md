@@ -1,4 +1,6 @@
-# DepremNeredeOldu: Backend [![DepremNeredeOldu Pipeline](https://github.com/depremneredeoldu/depremneredeoldu-backend/actions/workflows/pipeline.yaml/badge.svg)](https://github.com/depremneredeoldu/depremneredeoldu-backend/actions/workflows/pipeline.yaml)
+# DepremNeredeOldu: Backend
+
+[![DepremNeredeOldu Pipeline](https://github.com/depremneredeoldu/depremneredeoldu-backend/actions/workflows/pipeline.yaml/badge.svg)](https://github.com/depremneredeoldu/depremneredeoldu-backend/actions/workflows/pipeline.yaml)
 
 For this project, I used **Python** on the backend (**FastAPI**). The goal is to build the Earthquake API which gives you the earthquakes informations in Turkey. To do that, we get the data unstructured with web scraping and structure them into json structure and write them on the database.
 
