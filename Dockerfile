@@ -6,7 +6,7 @@ COPY ./requirements.txt /app/requirements.txt
 
 RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
 
-COPY .env /app/app/.env
+COPY .env /app/.env
 
 COPY ./app /app/app
 
