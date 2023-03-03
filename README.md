@@ -6,11 +6,7 @@ For this project, I used **Python** on the backend (**FastAPI**). The goal is to
 
 The project is deployed on [depremneredeoldu.com](https://depremneredeoldu.com). The API URL is [api.depremneredeoldu.com](https://api.depremneredeoldu.com)
 
-## Requirements
-
-    pip install -r requirements.txt
-
-## Build docker image
+## To build
 
     make build
 
