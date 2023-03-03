@@ -6,6 +6,8 @@ from app.core.config import settings
 
 app = FastAPI(
     title=settings.API_TITLE,
+    openapi_url=None,  # disable api docs
+    redoc_url=None,  # disable redoc docs
 )
 
 app.add_middleware(
