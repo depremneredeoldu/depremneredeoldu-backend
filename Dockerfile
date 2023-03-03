@@ -6,10 +6,12 @@ COPY ./requirements.txt /app/requirements.txt
 
 RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
 
+RUN mkdir /app/db
+
+VOLUME /app/db
+
 COPY .env /app/.env
 
 COPY ./app /app/app
-
-VOLUME ./db /app/db
 
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
