@@ -1,7 +1,7 @@
 name: DepremNeredeOldu Pipeline
 on:
   push:
-    branches: [fastapi-migration]
+    branches: [master]
 
 jobs:
   clone:
@@ -18,7 +18,7 @@ jobs:
           script: |
             if [ -d "${{ github.event.repository.name }}" ]; then
               cd ${{ github.event.repository.name }}
-              git checkout fastapi-migration
+              git checkout master
               git pull
             else
               git clone git@github.com:${{ github.repository }}.git
