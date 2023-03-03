@@ -10,6 +10,6 @@ COPY .env /app/.env
 
 COPY ./app /app/app
 
-VOLUME /home/production/db/ /app/db
+VOLUME /home/production/db /app/db
 
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
