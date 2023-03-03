@@ -10,13 +10,25 @@ api_key_header = APIKeyHeader(name=settings.API_KEY_HEADER_NAME, auto_error=Fals
 API_KEY_NOT_FOUND_ERR_MSG = "Are you sure to put API_KEY in your env file ?"
 
 
-async def check_api_key(
+async def check_api_key_get_endpoints(
     api_key_header: str = Security(api_key_header),
 ) -> APIKeyHeader:
-    if settings.API_KEY is None:
+    if settings.API_KEY_GET is None:
         raise APIKeyNotFound(API_KEY_NOT_FOUND_ERR_MSG)
 
-    if api_key_header == settings.API_KEY:
+    if api_key_header == settings.API_KEY_GET:
+        return api_key_header
+
+    raise HTTPException(status_code=HTTP_403_FORBIDDEN, detail="Could not validate credentials")
+
+
+async def check_api_key_post_endpoints(
+    api_key_header: str = Security(api_key_header),
+) -> APIKeyHeader:
+    if settings.API_KEY_POST is None:
+        raise APIKeyNotFound(API_KEY_NOT_FOUND_ERR_MSG)
+
+    if api_key_header == settings.API_KEY_POST:
         return api_key_header
 
     raise HTTPException(status_code=HTTP_403_FORBIDDEN, detail="Could not validate credentials")
