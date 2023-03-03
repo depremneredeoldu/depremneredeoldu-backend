@@ -1,0 +1,74 @@
+name: DepremNeredeOldu Pipeline
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  clone:
+    name: Clone
+    runs-on: ubuntu-latest
+    steps:
+      - name: clone
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DEPREM_PROD_HOSTNAME }}
+          username: ${{ secrets.DEPREM_PROD_USERNAME }}
+          key: ${{ secrets.DEPREM_PROD_SSH }}
+          port: 22
+          script: |
+            if [ -d "${{ github.event.repository.name }}" ]; then
+              cd ${{ github.event.repository.name }}
+              git checkout master
+              git pull
+            else
+              git clone git@github.com:${{ github.repository }}.git
+            fi
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: clone
+    steps:
+      - name: build
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DEPREM_PROD_HOSTNAME }}
+          username: ${{ secrets.DEPREM_PROD_USERNAME }}
+          key: ${{ secrets.DEPREM_PROD_SSH }}
+          port: 22
+          script: |
+            cd ${{ github.event.repository.name }}
+            make build
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DEPREM_PROD_HOSTNAME }}
+          username: ${{ secrets.DEPREM_PROD_USERNAME }}
+          key: ${{ secrets.DEPREM_PROD_SSH }}
+          port: 22
+          script: |
+            cd ${{ github.event.repository.name }}
+            make deploy
+
+  nginx:
+    name: Nginx Reload
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DEPREM_PROD_HOSTNAME }}
+          username: ${{ secrets.DEPREM_PROD_USERNAME }}
+          key: ${{ secrets.DEPREM_PROD_SSH }}
+          port: 22
+          script: |
+            cd ${{ github.event.repository.name }}
+            make nginx-reload
