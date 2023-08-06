@@ -22,9 +22,12 @@ def get_db():
 
 
 @router.get("/earthquakes")
-async def get_all_earthquakes(db: Session = Depends(get_db)):
-    all_earthquakes_obj = earthquake_crud.get_all_earthquakes(db=db)
-    return {"earthquakes": [each_earthquake for each_earthquake in all_earthquakes_obj]}
+async def get_earthquakes(db: Session = Depends(get_db), limit: int = None):
+    all_earthquakes_obj = earthquake_crud.get_earthquakes(db=db, limit=limit)
+    return {
+        "earthquakes": [each_earthquake for each_earthquake in all_earthquakes_obj],
+        "limit": limit,
+    }
 
 
 @router.post("/earthquake")

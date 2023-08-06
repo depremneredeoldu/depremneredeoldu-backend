@@ -11,8 +11,11 @@ def get_earthquake(db: Session, earthquake_id: str) -> Dict[str, str]:
     return db.query(Earthquake).filter(Earthquake.earthquake_id == earthquake_id).first()
 
 
-def get_all_earthquakes(db: Session) -> List[Dict[str, str]]:
-    return db.query(Earthquake).all()
+def get_earthquakes(db: Session, limit: int) -> List[Dict[str, str]]:
+    if limit is None:
+        return db.query(Earthquake).all()
+
+    return db.query(Earthquake).limit(limit).all()
 
 
 def create_earthquake(db: Session, earthquake: EarthquakeModel) -> None:
