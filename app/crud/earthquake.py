@@ -15,7 +15,7 @@ def get_earthquakes(db: Session, limit: int) -> List[Dict[str, str]]:
     if limit is None:
         return db.query(Earthquake).all()
 
-    return db.query(Earthquake).limit(limit).all()
+    return db.query(Earthquake).order_by(Earthquake.date.desc()).limit(limit).all()
 
 
 def create_earthquake(db: Session, earthquake: EarthquakeModel) -> None:
