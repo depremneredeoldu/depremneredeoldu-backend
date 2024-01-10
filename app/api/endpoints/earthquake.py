@@ -1,29 +1,27 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Security
 from fastapi.responses import JSONResponse
-from app.schemas.earthquake import EarthquakeModel
-from sqlalchemy.orm import Session
-from app.core.database import SessionLocal
-from app.core.database import Base, engine
-from app.crud import earthquake as earthquake_crud
-from fastapi import Security
-from app.core.security import check_api_key_post_endpoints
 
-Base.metadata.create_all(bind=engine)
+from app.core.security import check_api_key_post_endpoints
+from app.crud import earthquake as earthquake_crud
+from app.schemas.earthquake import EarthquakeModel
+
 router = APIRouter()
 
 
-# Dependency
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+@router.get("/earthquake/{earthquake_id}")
+async def get_earthquake(earthquake_id: int):
+    """Extract earthquake information by earthquake id"""
+    results = earthquake_crud.get_earthquake(earthquake_id=int(earthquake_id))
+    if results.total_rows == 0:
+        return JSONResponse({"message": "Earthquake not found."}, 404)
+
+    return {"earthquake": [each_earthquake for each_earthquake in results]}
 
 
 @router.get("/earthquakes")
-async def get_earthquakes(db: Session = Depends(get_db), limit: int = None):
-    all_earthquakes_obj = earthquake_crud.get_earthquakes(db=db, limit=limit)
+async def get_earthquakes(limit: int = None):
+    """Extract all earthquakes for a given limit"""
+    all_earthquakes_obj = earthquake_crud.get_earthquakes(limit=limit)
     return {
         "earthquakes": [each_earthquake for each_earthquake in all_earthquakes_obj],
         "limit": limit,
@@ -33,12 +31,12 @@ async def get_earthquakes(db: Session = Depends(get_db), limit: int = None):
 @router.post("/earthquake")
 async def create_earthquake(
     earthquake: EarthquakeModel,
-    db: Session = Depends(get_db),
-    api_key: str = Security(check_api_key_post_endpoints),
+    api_key: str = Security(check_api_key_post_endpoints),  # noqa,
 ) -> JSONResponse:
-    earthquake_obj = earthquake_crud.get_earthquake(db=db, earthquake_id=earthquake.earthquake_id)
-    if earthquake_obj:
+    """Add new earthquake"""
+    results = earthquake_crud.get_earthquake(earthquake_id=earthquake.earthquake_id)
+    if results.total_rows > 0:
         return JSONResponse({"message": "Earthquake already exists."}, 409)
 
-    earthquake_crud.create_earthquake(db=db, earthquake=earthquake)
+    earthquake_crud.create_earthquake(earthquake=earthquake)
     return JSONResponse({"message": "Earthquake added successfully."}, 201)

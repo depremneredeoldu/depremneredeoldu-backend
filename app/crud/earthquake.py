@@ -1,32 +1,44 @@
+from datetime import datetime
+from typing import Dict, List
+
+from fastapi.responses import JSONResponse
+from google.cloud import bigquery
 from sqlalchemy.orm import Session
 
-from app.models.earthquake import Earthquake
 from app.schemas.earthquake import EarthquakeModel
-from datetime import datetime
-from fastapi.responses import JSONResponse
-from typing import List, Dict
+
+project_id = "technical-test-env-408214"
+
+client = bigquery.Client(project=project_id)
+
+dataset_id = "test_alican"
+table_id = "alican"
 
 
-def get_earthquake(db: Session, earthquake_id: str) -> Dict[str, str]:
-    return db.query(Earthquake).filter(Earthquake.earthquake_id == earthquake_id).first()
+def get_earthquake(earthquake_id: int) -> Dict[str, str]:
+    query = f"SELECT * FROM `{project_id}.{dataset_id}.{table_id}` WHERE earthquake_id = @earthquake_id"
+    query_params = [
+        bigquery.ScalarQueryParameter("earthquake_id", "INT64", earthquake_id)
+    ]
+    job_config = bigquery.QueryJobConfig(query_parameters=query_params)
+    query_job = client.query(query, job_config=job_config)
+    results = query_job.result()
+    return results
 
 
-def get_earthquakes(db: Session, limit: int) -> List[Dict[str, str]]:
+def get_earthquakes(limit: int) -> List[Dict[str, str]]:
     if limit is None:
-        return db.query(Earthquake).all()
+        limit = 500
 
-    return db.query(Earthquake).order_by(Earthquake.id.desc()).limit(limit).all()
+    query = f"SELECT * FROM `{project_id}.{dataset_id}.{table_id}` LIMIT {limit}"
+    query_job = client.query(query)
+    results = query_job.result()
+    return results
 
 
-def create_earthquake(db: Session, earthquake: EarthquakeModel) -> None:
+def create_earthquake(earthquake: EarthquakeModel) -> None:
     earthquake_dict = earthquake.dict()
-    # date formating
-    earthquake_dict["date"] = datetime.strptime(earthquake_dict["date"], "%Y.%m.%d")
-
-    earthquake_db_obj = Earthquake(**earthquake_dict)
-    try:
-        db.add(earthquake_db_obj)
-        db.commit()
-        db.refresh(earthquake_db_obj)
-    except Exception as exc:  # noqa
-        return JSONResponse({"message": "An error occurred while saving to the db."}, 500)
+    table_ref = client.dataset(dataset_id).table(table_id)
+    table = client.get_table(table_ref)
+    hello = client.insert_rows_json(table, [earthquake_dict])
+    print("hello")
