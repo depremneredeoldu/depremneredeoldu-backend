@@ -8,7 +8,7 @@ from app.crud.exceptions import EmptyDBError
 from app.schemas.earthquake import EarthquakeModel
 
 
-def get_earthquake(db: firestore_v1.client.Client, earthquake_id: str) -> list(dict):
+def get_earthquake(db: firestore_v1.client.Client, earthquake_id: str) -> list[dict]:
     document = db.collection(settings.COLLECTION_NAME).document(settings.DOCUMENT_NAME)
     document_dict = document.get().to_dict()
     all_earthquakes_list = document_dict.get("earthquakes")
