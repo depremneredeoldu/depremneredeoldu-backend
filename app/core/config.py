@@ -1,4 +1,5 @@
 import os
+
 from pydantic import BaseSettings
 
 
@@ -12,6 +13,9 @@ class Settings(BaseSettings):
     API_KEY_HEADER_NAME: str = "x-api-key"
     API_KEY_GET: str = os.getenv("API_KEY_GET")
     API_KEY_POST: str = os.getenv("API_KEY_POST")
+    COLLECTION_NAME = os.getenv("COLLECTION_NAME")
+    DOCUMENT_NAME = os.getenv("DOCUMENT_NAME")
+    NB_EARTHQUAKES_TO_STOCK_IN_FIRESTORE = 2000
 
 
 settings = Settings()
