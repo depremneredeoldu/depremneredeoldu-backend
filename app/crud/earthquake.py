@@ -1,32 +1,65 @@
-from sqlalchemy.orm import Session
+from copy import deepcopy
+from typing import Dict, List
 
-from app.models.earthquake import Earthquake
+from google.cloud import firestore_v1
+
+from app.core.config import settings
+from app.crud.exceptions import EmptyDBError
 from app.schemas.earthquake import EarthquakeModel
-from datetime import datetime
-from fastapi.responses import JSONResponse
-from typing import List, Dict
 
 
-def get_earthquake(db: Session, earthquake_id: str) -> Dict[str, str]:
-    return db.query(Earthquake).filter(Earthquake.earthquake_id == earthquake_id).first()
+def get_earthquake(db: firestore_v1.client.Client, earthquake_id: str) -> list(dict):
+    document = db.collection(settings.COLLECTION_NAME).document(settings.DOCUMENT_NAME)
+    document_dict = document.get().to_dict()
+    all_earthquakes_list = document_dict.get("earthquakes")
+
+    if all_earthquakes_list is None:
+        raise EmptyDBError()
+
+    for earthquake in all_earthquakes_list:
+        if earthquake.get("earthquake_id") == earthquake_id:
+            return earthquake
+    return None
 
 
-def get_earthquakes(db: Session, limit: int) -> List[Dict[str, str]]:
+def get_earthquakes(db: firestore_v1.client.Client, limit: int) -> List[Dict[str, str]]:
+    document = db.collection(settings.COLLECTION_NAME).document(settings.DOCUMENT_NAME)
+    document_dict = document.get().to_dict()
+    all_earthquakes_list = document_dict.get("earthquakes")
+
+    if all_earthquakes_list is None:
+        raise EmptyDBError()
+
+    # Filter desc
+    all_earthquakes_list.sort(key=lambda item: item["earthquake_id"], reverse=True)
+
     if limit is None:
-        return db.query(Earthquake).all()
+        return all_earthquakes_list
 
-    return db.query(Earthquake).order_by(Earthquake.id.desc()).limit(limit).all()
+    return all_earthquakes_list[:limit]
 
 
-def create_earthquake(db: Session, earthquake: EarthquakeModel) -> None:
+def insert_earthquake(
+    db: firestore_v1.client.Client, earthquake: EarthquakeModel
+) -> None:
+    document = db.collection(settings.COLLECTION_NAME).document(settings.DOCUMENT_NAME)
+    document_dict = document.get().to_dict()
+    all_earthquakes_list = document_dict.get("earthquakes")
+
+    new_earthquakes_list = deepcopy(all_earthquakes_list)
+
+    if all_earthquakes_list is None:
+        raise EmptyDBError()
+
     earthquake_dict = earthquake.dict()
-    # date formating
-    earthquake_dict["date"] = datetime.strptime(earthquake_dict["date"], "%Y.%m.%d")
 
-    earthquake_db_obj = Earthquake(**earthquake_dict)
-    try:
-        db.add(earthquake_db_obj)
-        db.commit()
-        db.refresh(earthquake_db_obj)
-    except Exception as exc:  # noqa
-        return JSONResponse({"message": "An error occurred while saving to the db."}, 500)
+    # Add earthquake in earthquake list
+    new_earthquakes_list.append(earthquake_dict)
+
+    # Filter desc
+    new_earthquakes_list.sort(key=lambda item: item["earthquake_id"], reverse=True)
+
+    # Update our array in firestore
+    document.update(
+        earthquakes=new_earthquakes_list[: settings.NB_EARTHQUAKES_TO_STOCK_IN_DOC]
+    )
