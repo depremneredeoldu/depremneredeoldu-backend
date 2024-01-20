@@ -1,12 +1,22 @@
-import os
+import firebase_admin
+from firebase_admin import credentials, firestore
 
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from app.core.config import settings
 
-SQLALCHEMY_DATABASE_URL = os.getenv("DB_CONN", "sqlite:///db/database.db")
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+def get_firestore_db_object():
+    if settings.ENV == "dev":
+        cred = credentials.Certificate(settings.FIRESTORE_CREDENTIALS_PATH_FOR_DEV)
+        try:
+            app = firebase_admin.initialize_app(cred)
+        except ValueError:
+            app = firebase_admin.get_app()
 
-Base = declarative_base()
+        return firestore.client()
+
+    try:
+        app = firebase_admin.initialize_app()
+    except ValueError:
+        app = firebase_admin.get_app()
+
+    return firestore.client()
