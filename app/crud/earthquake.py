@@ -43,7 +43,7 @@ def insert_earthquake(
 ) -> None:
     document = db.collection(settings.COLLECTION_NAME).document(settings.DOCUMENT_NAME)
     document_dict = document.get().to_dict()
-    all_earthquakes_list = document_dict.get("earthquakes")
+    all_earthquakes_list = document_dict.get("earthquakes", [])
     new_earthquakes_list = deepcopy(all_earthquakes_list)
     earthquake_dict = earthquake.model_dump()
 
