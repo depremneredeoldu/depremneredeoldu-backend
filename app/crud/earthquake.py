@@ -13,7 +13,7 @@ def get_earthquake(db: firestore_v1.client.Client, earthquake_id: str) -> list[d
     all_earthquakes_list = document_dict.get("earthquakes")
 
     if all_earthquakes_list is None:
-        raise None
+        return None
 
     for earthquake in all_earthquakes_list:
         if earthquake.get("earthquake_id") == earthquake_id:
