@@ -4,7 +4,6 @@ from typing import Dict, List
 from google.cloud import firestore_v1
 
 from app.core.config import settings
-from app.crud.exceptions import EmptyDBError
 from app.schemas.earthquake import EarthquakeModel
 
 
@@ -14,7 +13,7 @@ def get_earthquake(db: firestore_v1.client.Client, earthquake_id: str) -> list[d
     all_earthquakes_list = document_dict.get("earthquakes")
 
     if all_earthquakes_list is None:
-        raise EmptyDBError()
+        raise None
 
     for earthquake in all_earthquakes_list:
         if earthquake.get("earthquake_id") == earthquake_id:
@@ -28,7 +27,7 @@ def get_earthquakes(db: firestore_v1.client.Client, limit: int) -> List[Dict[str
     all_earthquakes_list = document_dict.get("earthquakes")
 
     if all_earthquakes_list is None:
-        raise EmptyDBError()
+        return []
 
     # Filter desc
     all_earthquakes_list.sort(key=lambda item: item["earthquake_id"], reverse=True)
@@ -45,13 +44,8 @@ def insert_earthquake(
     document = db.collection(settings.COLLECTION_NAME).document(settings.DOCUMENT_NAME)
     document_dict = document.get().to_dict()
     all_earthquakes_list = document_dict.get("earthquakes")
-
     new_earthquakes_list = deepcopy(all_earthquakes_list)
-
-    if all_earthquakes_list is None:
-        raise EmptyDBError()
-
-    earthquake_dict = earthquake.dict()
+    earthquake_dict = earthquake.model_dump()
 
     # Add earthquake in earthquake list
     new_earthquakes_list.append(earthquake_dict)
