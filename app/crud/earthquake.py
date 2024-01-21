@@ -26,7 +26,7 @@ def get_earthquakes(db: firestore_v1.client.Client, limit: int) -> List[Dict[str
     document_dict = document.get().to_dict()
     all_earthquakes_list = document_dict.get("earthquakes_list")
 
-    if all_earthquakes_list is None:
+    if not all_earthquakes_list:
         return []
 
     # Filter desc
