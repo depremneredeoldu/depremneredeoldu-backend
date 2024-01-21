@@ -55,5 +55,7 @@ def insert_earthquake(
 
     # Update our array in firestore
     document.update(
-        earthquakes=new_earthquakes_list[: settings.NB_EARTHQUAKES_TO_STOCK_IN_DOC]
+        earthquakes=new_earthquakes_list[
+            : settings.NB_EARTHQUAKES_TO_STOCK_IN_FIRESTORE
+        ]
     )

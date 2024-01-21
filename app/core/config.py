@@ -19,7 +19,9 @@ class Settings(BaseSettings):
     )
     COLLECTION_NAME: str = os.getenv("COLLECTION_NAME")
     DOCUMENT_NAME: str = os.getenv("DOCUMENT_NAME")
-    NB_EARTHQUAKES_TO_STOCK_IN_FIRESTORE: int = 2000
+    NB_EARTHQUAKES_TO_STOCK_IN_FIRESTORE: int = os.getenv(
+        "NB_EARTHQUAKES_TO_STOCK_IN_FIRESTORE", 2000
+    )
 
 
 settings = Settings()
