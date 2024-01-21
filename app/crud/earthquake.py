@@ -24,7 +24,7 @@ def get_earthquake(db: firestore_v1.client.Client, earthquake_id: str) -> list[d
 def get_earthquakes(db: firestore_v1.client.Client, limit: int) -> List[Dict[str, str]]:
     document = db.collection(settings.COLLECTION_NAME).document(settings.DOCUMENT_NAME)
     document_dict = document.get().to_dict()
-    all_earthquakes_list = document_dict.get("earthquakes_list")
+    all_earthquakes_list = document_dict.get("earthquakes_list", [])
 
     if not all_earthquakes_list:
         return []
